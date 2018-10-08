@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{288B1CDE-81A1-4FE7-B5F5-9E7D6153CDA2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ToolKitty</RootNamespace>
+    <AssemblyName>ToolKitty</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ComponentModel\Interfaces\IUIInteractions.cs" />
+    <Compile Include="Deferrer.cs" />
+    <Compile Include="Disposer.cs" />
+    <Compile Include="ComponentModel\Parsables.cs" />
+    <Compile Include="EventSubscription.cs" />
+    <Compile Include="EventSystem.cs" />
+    <Compile Include="Formatters\Formatter.Char.cs" />
+    <Compile Include="Formatters\Formatter.Path.cs" />
+    <Compile Include="Formatters\Formatters.cs" />
+    <Compile Include="Formatters\Formatter.DateTime.cs" />
+    <Compile Include="Formatters\Formatter.Environment.cs" />
+    <Compile Include="Formatters\StringFormattableExtensions.cs" />
+    <Compile Include="Interop\KERNEL32.cs" />
+    <Compile Include="IO\IFileContainer.cs" />
+    <Compile Include="Reflection\Interfaces\IParameterInfo.cs" />
+    <Compile Include="Reflection\Lambda.cs" />
+    <Compile Include="ObjectFunctions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Globalization\TranslationKeyAttribute.cs" />
+    <Compile Include="Globalization\Translator.cs" />
+    <Compile Include="ComponentModel\UIBindable.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="Text\CharEnumerator.cs" />
+    <Compile Include="Timestamp.cs" />
+    <Compile Include="UUIDGenerator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

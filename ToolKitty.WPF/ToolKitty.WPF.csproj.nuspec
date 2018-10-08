@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ToolKitty.WPF</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/incureforce/ToolKitty/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/incureforce/ToolKitty</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>asdf</tags>
+    <dependencies>
+      <dependency id="ToolKitty" version="1.0.0" />
+    </dependencies>
+  </metadata>
+</package>
