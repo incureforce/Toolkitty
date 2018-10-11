@@ -12,7 +12,7 @@ namespace ToolKitty
     public class APIClient<T> : HttpClient
     {
         static readonly Regex
-            ParameterRegex = new Regex(":([A-Z0-9_]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            ParameterRegex = new Regex(@"/:([A-Z0-9_]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static IAPIClientInterceptor DefaultInterceptor
         {
@@ -120,7 +120,7 @@ namespace ToolKitty
 
             var builder = new StringBuilder(urlBuilder.ToString());
 
-            BindParameters(parameters, url, builder);
+            BindParameters(parameters, builder.ToString(), builder);
             BindQuery(parameters, url, builder);
 
             var request = new HttpRequestMessage() {
@@ -210,8 +210,8 @@ namespace ToolKitty
                 ? Uri.EscapeUriString(ObjectFunctions.ToString(argument.Data))
                 : string.Empty;
 
-            builder.Remove(offset + match.Index, match.Length);
-            builder.Insert(offset + match.Index, text);
+            builder.Remove(offset + match.Index + 1, match.Length -1);
+            builder.Insert(offset + match.Index + 1, text);
 
             return offset += (text.Length - match.Length);
         }
