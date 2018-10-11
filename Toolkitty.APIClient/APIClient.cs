@@ -120,8 +120,8 @@ namespace ToolKitty
 
             var builder = new StringBuilder(urlBuilder.ToString());
 
-            BindParameters(parameters, builder.ToString(), builder);
-            BindQuery(parameters, url, builder);
+            BindParameters(parameters, builder);
+            BindQuery(parameters, builder);
 
             var request = new HttpRequestMessage() {
                 RequestUri = new Uri(builder.ToString(), default(UriKind)),
@@ -135,8 +135,9 @@ namespace ToolKitty
             return SendAsync(request);
         }
 
-        private static bool BindQuery(APIClientParameterInfo[] parameters, string url, StringBuilder builder)
+        private static bool BindQuery(APIClientParameterInfo[] parameters, StringBuilder builder)
         {
+            var url = builder.ToString();
             var query = url.IndexOf('?') < 0;
 
             foreach (var argument in parameters) {
@@ -168,8 +169,9 @@ namespace ToolKitty
             return query;
         }
 
-        private void BindParameters(APIClientParameterInfo[] parameters, string url, StringBuilder builder)
+        private void BindParameters(APIClientParameterInfo[] parameters, StringBuilder builder)
         {
+            var url = builder.ToString();
             var offset = 0;
             var matches = ParameterRegex.Matches(url);
             var comparer = Environment.Comparer;
@@ -210,7 +212,7 @@ namespace ToolKitty
                 ? Uri.EscapeUriString(ObjectFunctions.ToString(argument.Data))
                 : string.Empty;
 
-            builder.Remove(offset + match.Index + 1, match.Length -1);
+            builder.Remove(offset + match.Index + 1, match.Length - 1);
             builder.Insert(offset + match.Index + 1, text);
 
             return offset += (text.Length - match.Length);
