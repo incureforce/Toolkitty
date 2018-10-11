@@ -103,9 +103,22 @@ namespace ToolKitty
             }
 
             var url = methodAttribute.URL;
-
             var method = new HttpMethod(methodAttribute.Method);
-            var builder = new StringBuilder(url);
+            URLBuilder urlBuilder = new URLBuilder();
+
+            var ea = new URLBuilder(url);
+            if (string.IsNullOrEmpty(ea.Host) && string.IsNullOrEmpty(ea.Scheme)) {
+                if (BaseAddress != null && !string.IsNullOrEmpty(BaseAddress.ToString())) { 
+                    urlBuilder.Parse(BaseAddress.ToString());
+                    urlBuilder.AddPath(url);
+                }
+            }
+
+            if(string.IsNullOrEmpty(urlBuilder.Host) && string.IsNullOrEmpty(urlBuilder.Scheme)) {
+                throw new UriFormatException("No Host or Scheme given in method Url or in BaseAddress of HttpClient");
+            }
+
+            var builder = new StringBuilder(urlBuilder.ToString());
 
             BindParameters(parameters, url, builder);
             BindQuery(parameters, url, builder);
