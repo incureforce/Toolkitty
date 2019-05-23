@@ -1,4 +1,9 @@
+# -- folders-- 
 /**/bin
 /**/obj
 /packages
 /.vs
+
+# -- files --
+/*.user
+/*.json

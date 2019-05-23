@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -9,119 +11,90 @@ namespace ToolKitty.XAML
     public class GlyphControl : Shape
     {
         public static readonly DependencyProperty
-            GlyphProperty = DependencyProperty.Register(nameof(Glyph), typeof(string), typeof(GlyphControl), new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.AffectsArrange)),
-            FontFamilyProperty = DependencyProperty.Register(nameof(FontFamily), typeof(FontFamily), typeof(GlyphControl), new FrameworkPropertyMetadata(default(FontFamily), FrameworkPropertyMetadataOptions.AffectsRender));
-
-        private Point baseline;
-        private Geometry geometry;
-
-        //private GlyphRun glyphRun;
+            TextProperty = TextBlock.TextProperty
+                .AddOwner(typeof(GlyphControl), new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.AffectsRender)),
+            FontFamilyProperty = TextBlock.FontFamilyProperty
+                .AddOwner(typeof(GlyphControl));
 
         public GlyphControl()
         {
-            return;
+            SnapsToDevicePixels = true;
         }
 
-        public string Glyph
-        {
-            get { return (string)GetValue(GlyphProperty); }
-            set { SetValue(GlyphProperty, value); }
+        public string Text {
+            get => GetValue(TextProperty) as string;
+            set => SetValue(TextProperty, value);
         }
 
-        public FontFamily FontFamily
-        {
-            get { return (FontFamily)GetValue(FontFamilyProperty); }
-            set { SetValue(FontFamilyProperty, value); }
+        public FontFamily FontFamily {
+            get => GetValue(FontFamilyProperty) as FontFamily;
+            set => SetValue(FontFamilyProperty, value);
         }
 
-        protected override Geometry DefiningGeometry
-        {
-            get => geometry;
+        protected override Geometry DefiningGeometry {
+            get {
+                return GetGeometry();
+            }
         }
 
-        protected override Size MeasureOverride(Size size)
+        protected override Size MeasureOverride(Size constraint)
         {
-            if (size.Width < 1) {
-                size.Width = 1;
-            }
-
-            if (size.Height < 1) {
-                size.Height = 1;
-            }
-
-            if (size.Height == double.PositiveInfinity) {
-                size.Height = size.Width;
-            }
-
-            if (size.Width == double.PositiveInfinity) {
-                size.Width = size.Height;
-            }
-
-            if (size.Width > size.Height) {
-                size.Width = size.Height;
-            }
-
-            if (size.Height > size.Width) {
-                size.Height = size.Width;
-            }
-
-            return size;
-        }
-
-        protected override Size ArrangeOverride(Size size)
-        {
-            GetGlyphrun(size);
-
-            return base.ArrangeOverride(size);
-        }
-
-        private GlyphTypeface GetGlyphTypeface()
-        {
-            foreach (var typeface in FontFamily.GetTypefaces()) {
-
-                if (typeface.TryGetGlyphTypeface(out var glyphTypeface)) {
-                    return glyphTypeface;
-                }
-            }
-
-            throw new NotSupportedException($"FontFamily » {FontFamily} « doesn't have a Glyph Typeface");
-        }
-
-        private void GetGlyphrun(Size constraint)
-        {
-            if (Glyph == null) {
-                return;
-            }
-
-            var glyphTypeface = GetGlyphTypeface();
-
-            TextOptions.SetTextHintingMode(this, TextHintingMode.Fixed);
-            TextOptions.SetTextRenderingMode(this, TextRenderingMode.Grayscale);
-            TextOptions.SetTextFormattingMode(this, TextFormattingMode.Ideal);
-
-            var actualWidth = constraint.Width;
-            var actualHeight = constraint.Height;
-
-            var glyph = glyphTypeface.CharacterToGlyphMap[Glyph.Single()];
-            var glyphSize = actualHeight / glyphTypeface.Baseline;
-            var glyphWidth = glyphTypeface.AdvanceWidths[glyph] * glyphSize;
-            var glyphHeight = glyphTypeface.AdvanceHeights[glyph] * glyphSize;
-
-            var glyphLeft = (actualWidth - glyphWidth) / 2D;
-
-            geometry = glyphTypeface.GetGlyphOutline(glyph, glyphSize, 5);
-
-            baseline = new Point(glyphLeft, glyphHeight);
-            // glyphRun = new GlyphRun(glyphTypeface, 0, false, glyphSize, new ushort[] { glyph }, baseline, new double[] { 0.0 }, null, null, null, null, null, null);
+            return GetSquare(constraint);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            drawingContext.PushTransform(new TranslateTransform(baseline.X, baseline.Y));
+            var size = RenderSize;
+
+            drawingContext.PushTransform(new TranslateTransform(0D, size.Height / 1D));
 
             base.OnRender(drawingContext);
 
             drawingContext.Pop();
+        }
+
+        private Geometry GetGeometry()
+        {
+            var glyphTypeface = default(GlyphTypeface);
+            var fontTypefaces = FontFamily.GetTypefaces();
+            var fontTypeface = fontTypefaces.First(x => x.TryGetGlyphTypeface(out glyphTypeface));
+
+            var size = GetSquare(RenderSize);
+            var baseline = glyphTypeface.Baseline;
+
+            if (size.Height == 0 || size.Width == 0 || string.IsNullOrEmpty(Text)) {
+                return Geometry.Empty;
+            }
+
+            foreach (var glyph in Text) {
+                var glyphIndex = glyphTypeface.CharacterToGlyphMap[glyph];
+
+                return glyphTypeface.GetGlyphOutline(glyphIndex, size.Height / baseline, size.Height);
+            }
+
+            return Geometry.Empty;
+        }
+
+        private static Size GetSquare(Size constraint)
+        {
+            var h = constraint.Height;
+            var w = constraint.Width;
+
+            if (double.IsInfinity(h) || double.IsInfinity(w)) {
+                return Size.Empty;
+            }
+
+            if (double.IsInfinity(h)) {
+                return new Size(w, w);
+            }
+
+            if (double.IsInfinity(w)) {
+                return new Size(h, h);
+            }
+
+            var z = Math.Min(w, h);
+
+            return new Size(z, z);
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿<Window x:Class="ToolKitty.XAML.GenericDialog" x:Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToolKitty.XAML"
+        mc:Ignorable="d"
+        Title="{Binding ElementName=root, Path=Model.Header}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <DockPanel DataContext="{Binding ElementName=root, Path=Model}">
+        <Border DockPanel.Dock="Bottom">
+            <local:ButtonsControl ItemsSource="{Binding Path=Buttons}" HorizontalAlignment="Right" />
+        </Border>
+        <Border>
+            <ContentControl Content="{Binding}" />
+        </Border>
+    </DockPanel>
+</Window>

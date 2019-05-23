@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace System.Windows.Input
 {
     public class UICommand : UIBindable, ICommand
     {
-        public delegate void ExecuteHandler(object parameter);
+        public delegate Task ExecuteHandler(object parameter);
         public delegate bool EnabledHandler(object parameter);
 
         private object icon;
@@ -24,7 +27,7 @@ namespace System.Windows.Input
             enabled = enabledHandler ?? DefaultEnabledHandler;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public virtual event EventHandler CanExecuteChanged;
 
         public object Icon
         {
@@ -49,9 +52,9 @@ namespace System.Windows.Input
             return enabled(parameter);
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            execute(parameter);
+            await execute(parameter);
 
             RaiseCanExecuteChanged(EventArgs.Empty);
         }
@@ -72,6 +75,29 @@ namespace System.Windows.Input
         private static bool DefaultEnabledHandler(object parameter)
         {
             return true;
+        }
+    }
+
+    public class WPFUICommand : UICommand
+    {
+        public static WPFUICommand Create(ExecuteHandler executeHandler, EnabledHandler enabledHandler = null)
+        {
+            var method = executeHandler.Method;
+
+            return new WPFUICommand(executeHandler, enabledHandler) {
+                Icon = GlyphIcons.GetIconModel(method),
+                Header = Translator.GetTranslation(method, TranslationIntent.DisplayName, true),
+                Description = Translator.GetTranslation(method, TranslationIntent.Description, false),
+            };
+        }
+
+        public WPFUICommand(ExecuteHandler executeHandler, EnabledHandler enabledHandler = null) : base(executeHandler, enabledHandler)
+        {
+        }
+
+        public override event EventHandler CanExecuteChanged {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
     }
 }

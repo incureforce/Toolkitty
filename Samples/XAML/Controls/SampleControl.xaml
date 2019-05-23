@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Samples.XAML.SampleControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:if="https://schemas.incureforce.com/2018/xaml/toolkitty"
+        xmlns:local="clr-namespace:Samples.XAML"
+        mc:Ignorable="d" 
+        d:DesignHeight="450" d:DesignWidth="800" Width="200" Height="120" Margin="4" Cursor="Hand">
+    <Grid x:Name="grid" if:Helper.Layout="1x(auto:001*)">
+        <Grid.Background>
+            <SolidColorBrush Color="#FF6495ED" x:Name="PART_Background" />
+        </Grid.Background>
+        <Border Grid.Row="0" Background="#33FFFFFF">
+            <TextBlock Padding="4" Text="Hello World!" />
+        </Border>
+        <Border Grid.Row="1">
+            <TextBlock Padding="4" Text="Description Text" />
+        </Border>
+        <Border Grid.Row="0" Grid.RowSpan="2" BorderThickness="1">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="#66FFFFFF" x:Name="PART_BorderBrush" />
+            </Border.BorderBrush>
+        </Border>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="CommonStates">
+                <VisualState Name="Normal">
+                    <Storyboard>
+                        <ColorAnimation To="#FF6495ED" Storyboard.TargetName="PART_Background" Storyboard.TargetProperty="Color" Duration="0:0:0.25" />
+                        <ColorAnimation To="#66FFFFFF" Storyboard.TargetName="PART_BorderBrush" Storyboard.TargetProperty="Color" Duration="0:0:0.25" />
+                        <!--<DoubleAnimation Storyboard.TargetName="PART_Background" Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:0.25" />-->
+                    </Storyboard>
+                </VisualState>
+                <VisualState Name="MouseOver">
+                    <Storyboard>
+                        <ColorAnimation To="#FF4D84EA" Storyboard.TargetName="PART_Background" Storyboard.TargetProperty="Color" Duration="0:0:0.25" />
+                        <ColorAnimation To="#FFF0F8FF" Storyboard.TargetName="PART_BorderBrush" Storyboard.TargetProperty="Color" Duration="0:0:0.25" />
+                        <!--<DoubleAnimation Storyboard.TargetName="PART_Background" Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.25" />-->
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

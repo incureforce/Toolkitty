@@ -12,7 +12,7 @@ namespace ToolKitty
     public class APIClient<T> : HttpClient
     {
         static readonly Regex
-            ParameterRegex = new Regex(@"/:([A-Z0-9_]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            ParameterRegex = new Regex(":([A-Z0-9_]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static IAPIClientInterceptor DefaultInterceptor
         {
@@ -103,24 +103,12 @@ namespace ToolKitty
             }
 
             var url = methodAttribute.URL;
+
             var method = new HttpMethod(methodAttribute.Method);
-            var urlBuilder = new URLBuilder(url);
-            
-            if (string.IsNullOrEmpty(urlBuilder.Host) && string.IsNullOrEmpty(urlBuilder.Scheme)) {
-                if (BaseAddress?.ToString() is string address && string.IsNullOrEmpty(address) == false) { 
-                    urlBuilder.Parse(address);
-                    urlBuilder.AddPath(url);
-                }
-            }
+            var builder = new StringBuilder(url);
 
-            if (string.IsNullOrEmpty(urlBuilder.Host) && string.IsNullOrEmpty(urlBuilder.Scheme)) {
-                throw new UriFormatException("No Host or Scheme given in method Url or in BaseAddress of HttpClient");
-            }
-
-            var builder = new StringBuilder(urlBuilder.ToString());
-
-            BindParameters(parameters, builder);
-            BindQuery(parameters, builder);
+            BindParameters(parameters, url, builder);
+            BindQuery(parameters, url, builder);
 
             var request = new HttpRequestMessage() {
                 RequestUri = new Uri(builder.ToString(), default(UriKind)),
@@ -134,9 +122,8 @@ namespace ToolKitty
             return SendAsync(request);
         }
 
-        private static bool BindQuery(APIClientParameterInfo[] parameters, StringBuilder builder)
+        private static bool BindQuery(APIClientParameterInfo[] parameters, string url, StringBuilder builder)
         {
-            var url = builder.ToString();
             var query = url.IndexOf('?') < 0;
 
             foreach (var argument in parameters) {
@@ -168,9 +155,8 @@ namespace ToolKitty
             return query;
         }
 
-        private void BindParameters(APIClientParameterInfo[] parameters, StringBuilder builder)
+        private void BindParameters(APIClientParameterInfo[] parameters, string url, StringBuilder builder)
         {
-            var url = builder.ToString();
             var offset = 0;
             var matches = ParameterRegex.Matches(url);
             var comparer = Environment.Comparer;
@@ -211,8 +197,8 @@ namespace ToolKitty
                 ? Uri.EscapeUriString(ObjectFunctions.ToString(argument.Data))
                 : string.Empty;
 
-            builder.Remove(offset + match.Index + 1, match.Length - 1);
-            builder.Insert(offset + match.Index + 1, text);
+            builder.Remove(offset + match.Index, match.Length);
+            builder.Insert(offset + match.Index, text);
 
             return offset += (text.Length - match.Length);
         }

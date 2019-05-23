@@ -7,12 +7,12 @@ namespace System.ComponentModel
 {
     public class UICommands : DynamicObject, IReadOnlyCollection<UICommand>
     {
-        private readonly Dictionary<Enum, UICommand>
-            commandMap = new Dictionary<Enum, UICommand>();
+        private readonly Dictionary<string, UICommand>
+            commandMap = new Dictionary<string, UICommand>(StringComparer.OrdinalIgnoreCase);
 
         public int Count => commandMap.Count;
 
-        public UICommand this[Enum code]
+        public UICommand this[string code]
         {
             get => commandMap[code];
             set => commandMap[code] = value;
@@ -20,12 +20,9 @@ namespace System.ComponentModel
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            foreach (var pair in commandMap) {
-                if (string.Equals($"{pair.Key}", binder.Name, StringComparison.OrdinalIgnoreCase)) {
-                    result = pair.Value;
-
-                    return true;
-                }
+            if (commandMap.TryGetValue(binder.Name, out var command)) {
+                result = command;
+                return true;
             }
 
             return base.TryGetMember(binder, out result);
@@ -50,14 +47,14 @@ namespace System.ComponentModel
             }
         }
 
-        public void Refresh(Enum code)
+        public void Refresh(string code)
         {
             var command = commandMap[code];
 
             command.RaiseCanExecuteChanged(EventArgs.Empty);
         }
 
-        public void Execute(Enum code, object parameter)
+        public void Execute(string code, object parameter)
         {
             var command = commandMap[code];
 

@@ -59,7 +59,7 @@ namespace System
                 return serviceProvider.GetService(serviceType);
             }
 
-            throw new KeyNotFoundException($"Type » {serviceType} « not found");
+            return null;
         }
     }
 }

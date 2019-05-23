@@ -6,46 +6,47 @@ namespace System.Windows.Media
 {
     public static class GlyphIcons
     {
-        public static Brush FillDefault
-        {
+        public static Brush FillDefault {
             get;
             set;
-        } = Brushes.CornflowerBlue;
+        } = Brushes.Black; // .CornflowerBlue;
 
-        public static GlyphModel GetIconModel(Enum code, Brush fill = null)
+        public static GlyphModel GetIconModel(Enum key, Brush fill = null)
         {
-            var codeType = code.GetType();
-            var codeTypeMember = codeType.GetField($"{code.ToString()}");
+            var enumType = key.GetType();
+            var enumMember = enumType.GetField($"{key}");
 
-            var glyphIcon = GetGlyphIcon(codeTypeMember) ?? code;
+            return GetIconModel(enumMember, fill);
+        }
+
+        public static GlyphModel GetIconModel(ICustomAttributeProvider attributeProvider, Brush fill = null)
+        {
+            var glyphIcon = GetGlyphIcon(attributeProvider);
 
             var glyphIconType = glyphIcon.GetType();
 
-            var fontFamily = GetFontFamily(glyphIconType);
-
-            if (fontFamily == null) {
-                return null;
-            }
+            var glyphFontFamily = GetFontFamily(glyphIconType);
 
             var glyphCode = Convert.ToInt32(glyphIcon);
-            var glyph = char.ConvertFromUtf32(glyphCode);
+
+            var glyphText = char.ConvertFromUtf32(glyphCode);
 
             return new GlyphModel {
-                FontFamily = fontFamily,
-                Glyph = glyph,
+                FontFamily = glyphFontFamily,
+                Glyph = glyphText,
                 Fill = fill ?? FillDefault,
             };
         }
 
-        private static Enum GetGlyphIcon(FieldInfo codeTypeField)
+        private static Enum GetGlyphIcon(ICustomAttributeProvider attributeProvider)
         {
-            var attributes = Attribute.GetCustomAttributes(codeTypeField, typeof(GlyphAttribute));
+            var attributes = attributeProvider.GetCustomAttributes(typeof(GlyphAttribute), true);
 
             if (attributes.FirstOrDefault() is GlyphAttribute attribute) {
                 return attribute.Icon;
             }
 
-            return null;
+            throw new NotSupportedException($"Missing Glyph icon information");
         }
 
         private static FontFamily GetFontFamily(Type codeType)
@@ -56,7 +57,7 @@ namespace System.Windows.Media
                 return attribute.GetFontFamily();
             }
 
-            return null;
+            throw new NotSupportedException($"Missing Glyph font information");
         }
     }
 }

@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -47,22 +48,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="XAML\Dialog\Frames\GenericDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\CommandHelper.cs" />
     <Compile Include="GO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UI\Enums\UICommandIntent.cs" />
     <Compile Include="UI\UICollection.cs" />
-    <Compile Include="XAML\Dialog\Dialog.cs" />
-    <Compile Include="XAML\Dialog\DialogResult.cs" />
+    <Compile Include="XAML\Behaviours\ScrollToBottomBehaviour.cs" />
+    <Compile Include="XAML\Controls\ButtonsControl.cs" />
+    <Compile Include="XAML\Converters\SystemIconConverter.cs" />
+    <Compile Include="XAML\Dialog\DialogCompleteEventArgs.cs" />
+    <Compile Include="XAML\Dialog\Frames\GenericDialog.xaml.cs">
+      <DependentUpon>GenericDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAML\Dialog\GenericDialogButton.cs" />
+    <Compile Include="XAML\Dialog\GenericDialogModel.cs" />
+    <Compile Include="XAML\Dialog\Interfaces\IDialogButton.cs" />
+    <Compile Include="XAML\Dialog\Interfaces\IDialogModel.cs" />
+    <Compile Include="XAML\Interfaces\IWindowManager.cs" />
     <Compile Include="XAML\Glyph\GlyphControl.cs" />
+    <Compile Include="XAML\Glyph\GlyphButton.cs" />
     <Compile Include="XAML\Glyph\GlyphModel.cs" />
     <Compile Include="Glyph\GlyphAttribute.cs" />
     <Compile Include="Glyph\GlyphIcons.cs" />
-    <Compile Include="XAML\Dialog\Interfaces\IDialogInteractions.cs" />
+    <Compile Include="XAML\Behaviours\PasswordBoxWatermarkBehaviour.cs" />
+    <Compile Include="XAML\SizeHelper.cs" />
+    <Compile Include="XAML\Helpers\Behaviour.cs" />
+    <Compile Include="XAML\Helpers\BehaviourCollection.cs" />
+    <Compile Include="XAML\Helpers\Behaviours.cs" />
+    <Compile Include="XAML\Helper.cs" />
+    <Compile Include="XAML\Helpers\TypedBehaviour.cs" />
+    <Compile Include="XAML\Panels\StagePanel.cs" />
     <Compile Include="XAML\Template\TemplateAttribute.cs" />
     <Compile Include="UI\UICommand.cs" />
     <Compile Include="UI\UICommands.cs" />
@@ -70,12 +91,20 @@
     <Compile Include="XAML\Template\TemplateGroup.cs" />
     <Compile Include="XAML\Template\TemplateGroupCollection.cs" />
     <Compile Include="UI\UIModelInteractions.cs" />
+    <Compile Include="XAML\DebugConverter.cs" />
+    <Compile Include="XAML\Watermark\WatermarkAdorner.cs" />
+    <Compile Include="XAML\Watermark\WatermarkQueryTriggersEventArgs.cs" />
+    <Compile Include="XAML\Watermark\WatermarkTrigger.cs" />
+    <Compile Include="XAML\Watermark\WatermarkTriggerCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ToolKitty\ToolKitty.csproj">
       <Project>{288b1cde-81a1-4fe7-b5f5-9e7d6153cda2}</Project>
       <Name>ToolKitty</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

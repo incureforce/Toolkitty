@@ -2,9 +2,13 @@
 
 namespace System.Text
 {
-    public class Formatters : Dictionary<string, IFormattable>
+    public class Formatters : Dictionary<string, object>
     {
         public Formatters() : base(StringComparer.InvariantCultureIgnoreCase)
+        {
+        }
+
+        public Formatters(IDictionary<string, object> dictionary) : base(dictionary, StringComparer.InvariantCultureIgnoreCase)
         {
         }
 

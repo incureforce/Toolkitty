@@ -1,10 +1,4 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="C:\Development\Projects\ToolKitty\ToolKitty\Reflection\Interfaces\IParameterInfo.cs" company="">
-//     Author:  
-//     Copyright (c) . All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-using System;
+﻿using System;
 
 namespace System.Reflection
 {

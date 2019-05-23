@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using ToolKitty;
 
 namespace System.Windows
 {
@@ -10,7 +11,9 @@ namespace System.Windows
     {
         public UICollection()
         {
-            View = CollectionViewSource.GetDefaultView(this);
+            View = GO.Dispatch(delegate {
+                return CollectionViewSource.GetDefaultView(this);
+            });
         }
 
         public ICollectionView View { get; }
