@@ -39,7 +39,7 @@ namespace System.Reflection.Emit
 
         public Type Build(ModuleBuilder moduleBuilder)
         {
-            var typeBuilder = moduleBuilder.DefineType($"proxy${parentType}", ProxyTypeAttributes, parentType, interfaceTypes);
+            var typeBuilder = moduleBuilder.DefineType($"proxy${parentType.Name}{interfaceTypes[0].Name}", ProxyTypeAttributes, parentType, interfaceTypes);
 
             DefineField(typeBuilder);
 
@@ -148,8 +148,8 @@ namespace System.Reflection.Emit
 
             for (var i = 0; i < methodParameterTypes.Length; ++i) {
                 ilGenerator.Emit(OpCodes.Dup);
-                ilGenerator.Emit(OpCodes.Ldarg, i + 1);
                 ilGenerator.Emit(OpCodes.Ldc_I4, i + 0);
+                ilGenerator.Emit(OpCodes.Ldarg, i + 1);
 
                 if (methodParameterTypes[i].IsValueType) {
                     ilGenerator.Emit(OpCodes.Box, methodParameterTypes[i]);
@@ -168,7 +168,7 @@ namespace System.Reflection.Emit
                 ilGenerator.Emit(OpCodes.Ret);
             }
             else {
-                throw new NotSupportedException($"Only Task return types supported on '{method}'");
+                throw new NotSupportedException($"Only Task return types supported on '{method}' in {method.DeclaringType}");
             }
 
             return new ProxyMethodMapping(methodBuilder, methodParameterTypes);
