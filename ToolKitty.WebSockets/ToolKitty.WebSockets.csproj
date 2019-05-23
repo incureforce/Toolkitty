@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BuildInfo.cs">
+      <Link>Properties\BuildInfo.cs</Link>
+    </Compile>
     <Compile Include="HTTP\Headers\GenericListHTTPHeader.cs" />
     <Compile Include="HTTP\Directives\HTTPClientDirective.cs" />
     <Compile Include="HTTP\HTTPHeaders.cs" />

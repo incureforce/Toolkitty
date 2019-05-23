@@ -49,6 +49,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BuildInfo.cs">
+      <Link>Properties\BuildInfo.cs</Link>
+    </Compile>
     <Compile Include="APIClient.cs" />
     <Compile Include="APIClientAttribute.cs" />
     <Compile Include="APIClientParameterInfo.cs" />

@@ -54,6 +54,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BuildInfo.cs">
+      <Link>Properties\BuildInfo.cs</Link>
+    </Compile>
     <Compile Include="GO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

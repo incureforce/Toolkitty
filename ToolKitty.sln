@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKitty.WebSockets", "ToolKitty.WebSockets\ToolKitty.WebSockets.csproj", "{6372021E-0477-4334-92ED-62CA8E1C95E7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA604930-603C-45BF-BF18-9092A34246BF}"
+	ProjectSection(SolutionItems) = preProject
+		BuildInfo.cs = BuildInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

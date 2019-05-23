@@ -37,6 +37,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\BuildInfo.cs">
+      <Link>Properties\BuildInfo.cs</Link>
+    </Compile>
     <Compile Include="Buffers\Interfaces\IFragment.cs" />
     <Compile Include="Buffers\StrideBuffer.cs" />
     <Compile Include="ComponentModel\Interfaces\IModelInteractions.cs" />
